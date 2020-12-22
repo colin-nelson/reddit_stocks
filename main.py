@@ -5,7 +5,7 @@ import csv
 
 reddit = praw.Reddit(client_id="2SnfVtrgAb-prQ", client_secret="SEhhHIKln8MXWY4-TeyJbIk7MXWyLQ", user_agent="reddit_stocks")
 
-sub = reddit.subreddit("cryptocurrency")
+sub = reddit.subreddit("wallstreetbets")
 
 #Create dictionary from csv with key = ticker and val = word counts
 csvName = "nasdaq.csv"
@@ -23,7 +23,7 @@ def getComments(submissionList):
         for comment in submission.comments.list():
             
             if(isinstance(comment.body, str)):
-                commentList.append(comment.body.encode("utf-8"))
+                commentList.append(comment.body)
                 #print(comment.body.encode("utf-8"))
     return commentList
 
@@ -35,13 +35,21 @@ def getSubmissions(sub, numSubmissions):
 
 def screenWords(commentList, tickerDict):
     for comment in commentList:
-        print(comment)
-    
+        cList = comment.split()
+        for word in cList:
+            #print(type(word))
+            if word.upper() in tickerCounts.keys():
+                tickerCounts[word.upper()] += 1
+
+def printSorted(tickerDict):
+    for ticker in sorted(tickerDict, key=tickerDict.get, reverse=False):
+        print(ticker, tickerDict[ticker])
 
 
-subList = getSubmissions(sub,1)
+subList = getSubmissions(sub,10)
 commentList = getComments(subList)
 screenWords(commentList, tickerCounts)
+printSorted(tickerCounts)
 
 
 
