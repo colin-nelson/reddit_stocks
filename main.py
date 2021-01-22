@@ -2,6 +2,7 @@
 import praw
 import pandas as pd
 import csv
+#import yfinance
 
 reddit = praw.Reddit(client_id="2SnfVtrgAb-prQ", client_secret="SEhhHIKln8MXWY4-TeyJbIk7MXWyLQ", user_agent="reddit_stocks")
 
@@ -37,13 +38,18 @@ def screenWords(commentList, tickerDict):
     for comment in commentList:
         cList = comment.split()
         for word in cList:
-            #print(type(word))
+            #print(word)
             if word.upper() in tickerCounts.keys():
                 tickerCounts[word.upper()] += 1
+            elif word.upper()[1:] in tickerCounts.keys():
+                tickerCounts[word.upper()[1:]] += 1
+               
+
 
 def printSorted(tickerDict):
     for ticker in sorted(tickerDict, key=tickerDict.get, reverse=False):
-        print(ticker, tickerDict[ticker])
+        if tickerDict[ticker] != 0:
+            print(ticker, tickerDict[ticker])
 
 
 subList = getSubmissions(sub,10)
