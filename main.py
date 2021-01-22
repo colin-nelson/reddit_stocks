@@ -3,6 +3,7 @@ import praw
 import pandas as pd
 import csv
 #import yfinance
+#brocktest
 
 reddit = praw.Reddit(client_id="2SnfVtrgAb-prQ", client_secret="SEhhHIKln8MXWY4-TeyJbIk7MXWyLQ", user_agent="reddit_stocks")
 
