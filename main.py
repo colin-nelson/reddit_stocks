@@ -41,7 +41,7 @@ def screenWords(commentList, tickerDict):
             #print(word)
             if word.upper() in tickerCounts.keys():
                 tickerCounts[word.upper()] += 1
-            elif word.upper()[1:] in tickerCounts.keys():
+            elif word[0] == "$" and word.upper()[1:] in tickerCounts.keys():
                 tickerCounts[word.upper()[1:]] += 1
                
 
