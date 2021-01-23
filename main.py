@@ -2,7 +2,10 @@
 import praw
 import pandas as pd
 import csv
+import nltk
 #import yfinance
+
+stopWords = nltk.corpus.stopwords.words('english')
 
 reddit = praw.Reddit(client_id="2SnfVtrgAb-prQ", client_secret="SEhhHIKln8MXWY4-TeyJbIk7MXWyLQ", user_agent="reddit_stocks")
 
@@ -47,7 +50,9 @@ def screenWords(commentList, tickerDict):
 
 
 def printSorted(tickerDict):
-    for ticker in sorted(tickerDict, key=tickerDict.get, reverse=False):
+    sortedTickers = sorted(tickerDict, key=tickerDict.get, reverse=False)
+    finalTickers = [x for x in sortedTickers if x.lower() not in stopWords]
+    for ticker in finalTickers:
         if tickerDict[ticker] != 0:
             print(ticker, tickerDict[ticker])
 
