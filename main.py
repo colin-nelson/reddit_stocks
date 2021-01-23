@@ -2,7 +2,11 @@
 import praw
 import pandas as pd
 import csv
-#import yfinance
+import yahoo_fin as yf
+import requests
+import requests_html
+import io
+import ftplib
 
 reddit = praw.Reddit(client_id="2SnfVtrgAb-prQ", client_secret="SEhhHIKln8MXWY4-TeyJbIk7MXWyLQ", user_agent="reddit_stocks")
 
@@ -44,12 +48,18 @@ def screenWords(commentList, tickerDict):
             elif word[0] == "$" and word.upper()[1:] in tickerCounts.keys():
                 tickerCounts[word.upper()[1:]] += 1
                
-
-
 def printSorted(tickerDict):
     for ticker in sorted(tickerDict, key=tickerDict.get, reverse=False):
         if tickerDict[ticker] != 0:
             print(ticker, tickerDict[ticker])
+
+def getStockPrice(ticker):
+    gme_week = get_data("gme", start_date="12/04/2009", end_date="1/22/2021", index_as_date = True, interval="1wk")
+    print(gme_week)
+
+    
+
+
 
 
 subList = getSubmissions(sub,10)
