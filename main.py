@@ -2,17 +2,15 @@
 import praw
 import pandas as pd
 import csv
-<<<<<<< HEAD
 import yahoo_fin as yf
 import requests
 import requests_html
 import io
 import ftplib
-=======
 import nltk
-#import yfinance
->>>>>>> c1ff7f750c3fb1c33f303df710b88d5e0b06142e
+import yahoo_fin.stock_info as si
 
+nltk.download('stopwords')
 stopWords = nltk.corpus.stopwords.words('english')
 
 reddit = praw.Reddit(client_id="2SnfVtrgAb-prQ", client_secret="SEhhHIKln8MXWY4-TeyJbIk7MXWyLQ", user_agent="reddit_stocks")
@@ -24,6 +22,8 @@ csvName = "nasdaq.csv"
 with open(csvName, mode='r') as fin:
     reader = csv.reader(fin)
     tickerCounts = {rows[0]:0 for rows in reader}
+
+#tickerCounts = {tick:0 for tick in si.tickers_nasdaq()}
 
 # display the subreddit name 
 print(sub.display_name) 
@@ -57,13 +57,14 @@ def screenWords(commentList, tickerDict):
                
 def printSorted(tickerDict):
     sortedTickers = sorted(tickerDict, key=tickerDict.get, reverse=False)
+    #print(sortedTickers)
     finalTickers = [x for x in sortedTickers if x.lower() not in stopWords]
     for ticker in finalTickers:
-        if tickerDict[ticker] != 0:
-            print(ticker, tickerDict[ticker])
+       if tickerDict[ticker] > 10:
+           print(ticker, tickerDict[ticker])
 
 def getStockPrice(ticker):
-    gme_week = get_data("gme", start_date="12/04/2009", end_date="1/22/2021", index_as_date = True, interval="1wk")
+    gme_week = si.get_data(ticker, start_date="12/04/2009", end_date="1/22/2021", index_as_date = True, interval="1wk")
     print(gme_week)
 
     
@@ -71,10 +72,11 @@ def getStockPrice(ticker):
 
 
 
-subList = getSubmissions(sub,10)
+subList = getSubmissions(sub,100)
 commentList = getComments(subList)
 screenWords(commentList, tickerCounts)
 printSorted(tickerCounts)
-
+#get_day_gainers()
+#getStockPrice("gme")
 
 
